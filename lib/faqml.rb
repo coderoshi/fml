@@ -11,6 +11,7 @@ class FML
     linked_question = attrs[:linked_question] || true
 
     faqs, current = [], :q
+    faqs << {:q => "", :a => "", :t => ""}
     @data.split(/\n/m).each do |line|
       # start an answer block
       if line =~ /^===\s*$/
@@ -46,9 +47,11 @@ class FML
         buffer += "<h1>#{faq[:t].to_s.strip}</h1>\n"
       end
       buffer += "<div class=\"qna\">"
-      buffer += "<div class=\"question\">"
-      buffer += redcarpet.render(faq[:q].to_s)
-      buffer += "</div>"
+      if faq[:q].to_s != ''
+        buffer += "<div class=\"question\">"
+        buffer += redcarpet.render(faq[:q])
+        buffer += "</div>"
+      end
       buffer += "<div class=\"answer\">"
       buffer += redcarpet.render(faq[:a].to_s)
       buffer += "</div>"
