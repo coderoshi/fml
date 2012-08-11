@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'faqml'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.date        = '2012-08-10'
   s.summary     = "FAQ Markup Language"
   s.description = "A Simple FAQ Markup Language, based on Markdown"

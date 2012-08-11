@@ -10,7 +10,7 @@ class FML
   def to_html(attrs={})
     linked_question = attrs[:linked_question] || true
 
-    faqs, current = [], :q
+    faqs, current = [], :t
     faqs << {:q => "", :a => "", :t => ""}
     @data.split(/\n/m).each do |line|
       # start an answer block
