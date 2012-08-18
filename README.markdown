@@ -9,7 +9,7 @@ require 'tilt'
 puts Tilt.new('mypage.fml').render
 ```
 
-Your markup in `mypage.fml` should be valid markdown. The only difference is, that QnA blocks are started by three dashes (`---`), and questions and answers are seperated by three equals (`===`). The first line of the question block will be the QnA's title. That's all.
+Your markup in `mypage.fml` should be valid markdown. The only difference is, that QnA blocks are started by the keyword "question:", or "Q:", and answers being with "answer:" or "A:". If there is any text on the line after the question or answer keywords, it will be that section's summary (neither are required). All remaining indented text consitute the body of the question of answer.
 
 This FML
 
