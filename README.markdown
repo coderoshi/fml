@@ -1,14 +1,11 @@
 # FML
 
-The FAQ Markup Language. It's pretty simple. The gem is called `faqml`, so first install it.
+The FAQ Markup Language. It's pretty simple. The gem is called `faqml`, so first install it. Then just access it through Tilt.
 
 ```ruby
 require 'rubygems'
 require 'faqml'
-data = File.readlines('mypage.fml').join()
-puts FML.new(data).to_html
-
-# Or better yet, use Tilt
+require 'tilt'
 puts Tilt.new('mypage.fml').render
 ```
 
