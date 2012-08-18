@@ -7,6 +7,9 @@ require 'rubygems'
 require 'faqml'
 data = File.readlines('mypage.fml').join()
 puts FML.new(data).to_html
+
+# Or better yet, use Tilt
+puts Tilt.new('mypage.fml').render
 ```
 
 Your markup in `mypage.fml` should be valid markdown. The only difference is, that QnA blocks are started by three dashes (`---`), and questions and answers are seperated by three equals (`===`). The first line of the question block will be the QnA's title. That's all.
@@ -14,38 +17,33 @@ Your markup in `mypage.fml` should be valid markdown. The only difference is, th
 This FML
 
 ```fml
----
-What kind of Bear is Best?
-I hear there are basically two school of thought.
-===
-False. *Blackbear*.
+question: What kind of Bear is Best?
+  I hear there are basically two school of thought.
+answer:
+  False. *Blackbear*.
 
----
-Do Bears eat Beats?
-===
-Of course.
+Q: Do Bears eat Beats?
+A: Of course.
 ```
 
 Produces this HTML
 
 ```html
 <section class="qna">
-  <h1><a href="#">What kind of Bear is Best?</a></h1>
-  <div class="qna">
-    <div class="question">
-      <p>I hear there are basically two school of thought.</p>
-    </div>
-    <div class="answer">
-      <p>False. <em>Blackbear</em>.</p>
-    </div>
-  </div>
+  <details class="question">
+    <summary>What kind of Bear is Best?</summary>
+    <div>I hear there are basically two school of thought</div>
+  </details>
+  <details class="answer">
+    <div>False. *Blackbear*</div>
+  </details>
 </section>
 <section class="qna">
-  <h1><a href="#">Do Bears eat Beats?</a></h1>
-  <div class="qna">
-    <div class="answer">
-      <p>Of course.</p>
-    </div>
-  </div>
+  <details class="question">
+    <summary>Do Bears eat Beats?</summary>
+  </details>
+  <details class="answer">
+    <summary>Of course.</summary>
+  </details>
 </section>
 ```
