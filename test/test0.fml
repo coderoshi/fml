@@ -1,4 +1,2 @@
-question: What kind of bear is best?
-  Well?
-answer: False
-  Blackbear
+question: What kind of bear is *best?*
+answer: False. *Blackbear*

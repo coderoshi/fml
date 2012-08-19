@@ -23,6 +23,8 @@ class FAQML::WrapFilter < Temple::Filter
       if exp.length > 2 && exp[0] == :fml
         case exp[1]
         when :question
+          # compile the details
+          # exp[3] = compile(exp[3])
           current_block = [:fml, :qna, exp]
           result << current_block
         when :answer

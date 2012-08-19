@@ -11,7 +11,7 @@ class FAQML::Engine < Temple::Engine
   use FAQML::Parser, :strict
 
   # TODO: replace inline generation with a markdown filter
-  # use FAQML::MarkdownFilter
+  use FAQML::MarkdownFilter
   use FAQML::WrapFilter
   use FAQML::DetailsFilter
 
