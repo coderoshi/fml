@@ -27,20 +27,20 @@ Produces this HTML
 
 ```html
 <section class="qna">
-  <details class="question">
+  <details class="question" open>
     <summary>What kind of Bear is Best?</summary>
     <div>I hear there are basically two school of thought</div>
-  </details>
-  <details class="answer">
-    <div>False. *Blackbear*</div>
+    <details class="answer" open>
+      <div>False. *Blackbear*</div>
+    </details>
   </details>
 </section>
 <section class="qna">
-  <details class="question">
+  <details class="question" open>
     <summary>Do Bears eat Beats?</summary>
-  </details>
-  <details class="answer">
-    <summary>Of course.</summary>
+    <details class="answer" open>
+      <summary>Of course.</summary>
+    </details>
   </details>
 </section>
 ```

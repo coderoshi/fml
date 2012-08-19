@@ -1,5 +1,3 @@
-require 'redcarpet'
-
 # Transforms FML into a Temple expression
 # @api private
 class FAQML::Parser
@@ -32,11 +30,6 @@ class FAQML::Parser
 
   def initialize(options = {})
     super
-
-    renderer = Redcarpet::Render::HTML.new
-    extensions = {fenced_code_blocks: true}
-    @markdown = Redcarpet::Markdown.new(renderer, extensions)
-
     @tab = ' ' * @options[:tabsize]
   end
 
@@ -65,32 +58,18 @@ class FAQML::Parser
 
   private
 
-  # TODO: the markdown rendering should be a filter... that way
-  # you could have different kinds of FML markups
-
-  # TODO: rewrite this to have a sort of wrapping filter... have this just output:
-  # [:question, [:summary, [text]], [:data, [line, line...]]]
-  # [:answer,   [:summary, [text]], [:data, [line, line...]]]
-
   def parse_line
     # start an answer block
     if @line =~ /^a(nswer)?(\s*)\:\s*(.*?)$/i
       asummary = @line.sub(/^a(nswer)?(\s*)\:(\s*)/i, '')
       syntax_error!("Cannot begin an answer without a question") if @current != :q
       @current = :a
-
-      @stacks.last.last << [:html, :tag, 'details', [:html, :attrs, [:html, :attr, 'class', [:static, 'answer']]], [:multi]]
-      @stacks.last.last.last.last << [:html, :tag, 'summary', [:multi], [:static, asummary]]
-      @stacks.last.last.last.last << [:html, :tag, 'div', [:multi], [:multi]]
+      @stacks << [:fml, :answer, [:fml, :summary, [asummary]], [:fml, :details, []] ]
 
     elsif @line =~ /^q(uestion)?(\s*)\:\s*(.*?)$/i
       qsummary = @line.sub(/^q(uestion)?(\s*)\:(\s*)/i, '')
       @current = :q
-
-      @stacks << [:html, :tag, 'section', [:html, :attrs, [:html, :attr, 'class', [:static, 'qna']]],[:multi]]
-      @stacks.last.last << [:html, :tag, 'details', [:html, :attrs, [:html, :attr, 'class', [:static, 'question']]], [:multi]]
-      @stacks.last.last.last.last << [:html, :tag, 'summary', [:multi], [:static, qsummary]]
-      @stacks.last.last.last.last << [:html, :tag, 'div', [:multi], [:multi]]
+      @stacks << [:fml, :question, [:fml, :summary, [qsummary]], [:fml, :details, []]]
 
     else
       indent = get_indent(@line)
@@ -99,16 +78,18 @@ class FAQML::Parser
         @strip_exp = %r"^\s{#{@base_indent}}"
       end
 
-      if indent >= 1
+      if @base_indent > 0 && indent >= @base_indent && !@current.nil?
         # strip off base_indent from @line
-        @stacks.last.last.last.last.last.last << [:static, @line.sub("\t", @tab).sub(@strip_exp, '')]
-        @stacks.last.last.last.last.last.last << [:newline]
-      else
+        @stacks.last.last.last << [:static, @line.sub("\t", @tab).sub(@strip_exp, '')]
+        @stacks.last.last.last << [:newline]
+      elsif @line.strip != ''
         # done with the indented block
         @base_indent = 0
-      end
+        @current = nil
 
-      @current = :q if @line.strip != ''
+        @stacks << [:static, @line]
+        @stacks << [:newline]
+      end
     end
   end
 
@@ -142,7 +123,6 @@ class FAQML::Parser
     args[:line] ||= @line
     args[:lineno] ||= @lineno
     args[:column] ||= args[:orig_line] && args[:line] ? args[:orig_line].size - args[:line].size : 0
-    raise SyntaxError.new(message, options[:file],
-                          args[:orig_line], args[:lineno], args[:column])
+    raise SyntaxError.new(message, options[:file], args[:orig_line], args[:lineno], args[:column])
   end
 end

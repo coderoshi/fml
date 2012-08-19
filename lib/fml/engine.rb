@@ -12,7 +12,8 @@ class FAQML::Engine < Temple::Engine
 
   # TODO: replace inline generation with a markdown filter
   # use FAQML::MarkdownFilter
-  # use FAQML::WrapFilter
+  use FAQML::WrapFilter
+  use FAQML::DetailsFilter
 
   html :AttributeMerger, :attr_delimiter
   html :AttributeSorter, :sort_attrs
