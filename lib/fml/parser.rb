@@ -72,17 +72,18 @@ class FAQML::Parser
       @stacks << [:fml, :question, [:fml, :summary, [qsummary]], [:fml, :details, []]]
 
     else
+
       indent = get_indent(@line)
       if @base_indent == 0
         @base_indent = indent
         @strip_exp = %r"^\s{#{@base_indent}}"
       end
 
-      if @base_indent > 0 && indent >= @base_indent && !@current.nil?
+      if @base_indent > 0 && (indent >= @base_indent || @line.strip == '') && !@current.nil?
         # strip off base_indent from @line
         @stacks.last.last.last << [:static, @line.sub("\t", @tab).sub(@strip_exp, '')]
         @stacks.last.last.last << [:newline]
-      elsif @line.strip != ''
+      elsif @line.strip == ''
         # done with the indented block
         @base_indent = 0
         @current = nil
