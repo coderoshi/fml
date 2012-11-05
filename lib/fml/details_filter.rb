@@ -9,9 +9,13 @@ class FAQML::DetailsFilter < Temple::Filter
 
   def on_fml_qna(question, answer=nil)
     answer_sexp = !answer.nil? && answer.length >= 4 ? build_fml_details('answer', true, answer[2], answer[3]) : nil
-    question_sexp = build_fml_details('question', false, question[2], question[3])
+    question_sexp = build_fml_details('question', false, summary = question[2], question[3])
     question_sexp.last << answer_sexp unless answer_sexp.nil?
-    [:html, :tag, 'section', [:html, :attrs, [:html, :attr, 'class', [:static, 'qna']]],
+
+    attrs = [:html, :attrs, [:html, :attr, 'class', [:static, 'qna']]]
+    id = summary.last.first.to_s.downcase.gsub(/(\<.+?\>)/, '').gsub(/[\W]/, ' ')[0..25].strip.gsub(/\s+/, '-')
+    attrs << [:html, :attr, 'id', [:static, id]] unless id == ''
+    [:html, :tag, 'section', attrs,
       question_sexp
     ]
   end

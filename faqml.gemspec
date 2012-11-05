@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.email       = 'eric@basho.com'
   s.homepage    = 'http://rubygems.org/gems/faqml'
 
-  s.add_dependency('redcarpet', '>= 2.1.1')
-  s.add_dependency('temple', '>= 0.4.0')
+  s.add_dependency('redcarpet', '~> 2.1.1')
+  s.add_dependency('temple', '~> 0.4.0')
   s.add_dependency('tilt', '~> 1.3.3')
 
   s.files       = `git ls-files`.split("\n")
