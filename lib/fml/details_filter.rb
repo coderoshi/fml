@@ -1,6 +1,10 @@
 class FAQML::DetailsFilter < Temple::Filter
+  include Temple::Mixins::Options
+
+  set_default_options :id_max_length => 50
+
   def initialize(options = {})
-    @options = options
+    super(options)
   end
 
   def call(exp)
@@ -13,7 +17,7 @@ class FAQML::DetailsFilter < Temple::Filter
     question_sexp.last << answer_sexp unless answer_sexp.nil?
 
     attrs = [:html, :attrs, [:html, :attr, 'class', [:static, 'qna']]]
-    id = summary.last.first.to_s.downcase.gsub(/(\<.+?\>)/, '').gsub(/[\W]/, ' ')[0..25].strip.gsub(/\s+/, '-')
+    id = convert_to_id(summary.last.first)
     attrs << [:html, :attr, 'id', [:static, id]] unless id == ''
     [:html, :tag, 'section', attrs,
       question_sexp
@@ -21,6 +25,10 @@ class FAQML::DetailsFilter < Temple::Filter
   end
 
   private
+
+  def convert_to_id(str)
+    str.to_s.downcase.gsub(/(\<.+?\>)/, '').gsub(/[\W]/, ' ')[0...options[:id_max_length]].strip.gsub(/\s+/, '-')
+  end
 
   def build_fml_details(class_name, open, summary, details)
     attrs = [:html, :attrs, [:html, :attr, 'class', [:static, class_name]] ]
